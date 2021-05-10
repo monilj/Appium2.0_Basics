@@ -1,6 +1,9 @@
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -18,10 +21,10 @@ public class AutomationTestWithAppium {
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "Android Emulator");
         capabilities.setCapability("automationName", "UiAutomator2");
-        capabilities.setCapability("app", "/Users/dev/Documents/monilj/AppiumPro/app/API_Demos.apk");
+        capabilities.setCapability("app", "C:\\Users\\monil.joshi\\Documents\\monilj\\Appium2.0\\app\\Learn_Android_With_Source_Code.apk");
 
         try {
-            androidDriver = new AndroidDriver<AndroidElement>(new URL("http://127.0.0.1:4723/wd/hub"),capabilities);
+            androidDriver = new AndroidDriver<AndroidElement>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -31,7 +34,13 @@ public class AutomationTestWithAppium {
     }
 
     @Test
-    public void openApp(){
-        
+    public void testUiWidgets() {
+        String textPass = "Hello";
+        androidDriver.findElementByXPath("//android.widget.TextView[@text='Android UI Widgets']").click();
+        androidDriver.findElementByXPath("//android.widget.TextView[@text='EditText']/following-sibling::android.widget.ImageView").click();
+        androidDriver.findElementByClassName("android.widget.EditText").sendKeys(textPass);
+        String typedText = androidDriver.findElementById("com.tutorials.learn.androidexample:id/txtedt").getText();
+        Assert.assertTrue(textPass.equalsIgnoreCase(typedText));
+
     }
 }
