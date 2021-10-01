@@ -19,21 +19,25 @@ import java.util.concurrent.TimeUnit;
 public class AutomationTestWithAppium {
     static AndroidDriver<AndroidElement> androidDriver;
     static AppiumDriverLocalService service;
+    static AppiumServiceBuilder builder;
     @BeforeTest
     public static AndroidDriver<AndroidElement> androidCapForNativeApp() throws IOException {
-        AppiumServiceBuilder builder = new AppiumServiceBuilder();
+//        AppiumServiceBuilder builder = new AppiumServiceBuilder();
+//        builder.withIPAddress("127.0.0.1").usingPort(4728);
+        AppiumServiceBuilder builder;
+        builder = new AppiumServiceBuilder().withArgument(() -> "--base-path", "/wd/hub").withArgument(() -> "--plugins", "images");
         builder.usingAnyFreePort();
         builder.usingDriverExecutable(new File("C:\\Program Files\\nodejs\\node.exe"));
-        builder.withAppiumJS(new File("C:\\Users\\monil.joshi\\AppData\\Local\\Programs\\Appium\\resources\\app\\node_modules\\appium"));
+            builder.withAppiumJS(new File("C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\appium"));
         HashMap<String, String> environment = new HashMap();
         environment.put("PATH", "/usr/local/bin:" + System.getenv("PATH"));
         builder.withEnvironment(environment);
         service = AppiumDriverLocalService.buildService(builder);
         service.start();
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("platformName", "Android");
+        capabilities.setCapability("appium:platformName", "Android");
         capabilities.setCapability("deviceName", "Android Emulator");
-        capabilities.setCapability("automationName", "UiAutomator2");
+        capabilities.setCapability("appium:automationName", "UiAutomator2");
         capabilities.setCapability("app", "D:\\IntellijProjects\\Appium 2.0\\Appium2.0_Basics\\app\\Learn_Android_With_Source_Code.apk");
 
         androidDriver = new AndroidDriver<AndroidElement>(service.getUrl(), capabilities);
